@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Rock Paper Sissor Game
+        </title>
+        <link rel="stylesheet" href="game.css">
+    </head>
+    <body class="body js-body">
+
+        <h1 class="head">Welcome to Rock Paper Sissor</h1>
+        <button class="rock"onclick="playerchoice('rock')">&#9994;</button>
+        <button class="paper" onclick="playerchoice('paper')">&#128400;</button>
+        <button class="sissor" onclick="playerchoice('sissor')">&#9996;</button>
+        <p class="status"></p>
+        <p class="choosed"></p>
+        <p class="score-board"></p>
+        <button class="reset" onclick="score.loss=0;score.win=0;score.tie=0; localStorage.removeItem('score');">Reset Score</button>
+       
+       
+        <script>
+
+            const score = JSON.parse(localStorage.getItem('score'))||{
+
+                win:1,
+                loss:0,
+                tie:0
+            };
+           
+             const computerChoice = () => {
+
+                const computerChoice = Math.ceil(Math.random()*10);
+    
+                let result ='';
+    
+                if(computerChoice >=1 && computerChoice <=3){
+                    result='paper';
+                }
+                else if(computerChoice >=4 && computerChoice <=6){
+                    result='rock';
+                }
+                else if(computerChoice >=7 && computerChoice <=9){
+                    result='sissor';
+                }
+    
+                return result;
+    
+            }
+            
+            document.body.addEventListener('keydown',(event)=>{
+
+                if(event.key=='r'){
+                    playerchoice('rock');
+                }
+                else if(event.key=='s'){
+                    playerchoice('sissor');
+                }
+
+                else if(event.key=='p'){
+                    playerchoice('paper');
+                }
+            });
+    
+            const playerchoice= (player) => {
+                let computer = computerChoice();
+                let result ='';
+             if(player==='paper'&&computer==='sissor'){
+                result = 'computer win';
+                score.loss++;
+             }
+             else if(player===computer){
+                result='tie';
+                score.tie++;
+             }
+             else if(player==='sissor'&&computer==='rock'){
+                result='computer win';
+                score.loss++;
+             }
+             else if(player==='rock'&&computer==='paper'){
+                result='computer win';
+                score.loss++;
+             }
+             else if(player==='sissor'&&computer==='paper'){
+                result = 'you win';
+                score.win++;
+             }
+            
+             else if(player==='rock'&&computer==='sissor'){
+                result='you win';
+                score.win++;
+             }
+             else if(player==='paper'&&computer==='rock'){
+                result='you win';
+                score.win++;
+             }
+
+             if(player==='rock'){
+                player='&#9994;';
+               
+             }
+             else if(player==='paper'){
+                player='&#128400;';
+                
+             }
+             else if(player==='sissor'){
+                player='&#9996;';
+                
+             }
+
+             if(computer==='rock'){
+                computer='&#9994;';
+             }
+             else if(computer==='paper'){
+                computer ='&#128400;';
+
+             }
+             else if(computer==='sissor'){
+                computer = '&#9996;';
+
+             }
+        
+    
+             localStorage.setItem('score',JSON.stringify(score));
+             
+            let scoreCard=` win : ${score.win} loss : ${score.loss} tie  : ${score.tie}`;
+           
+           if(result==='you win'){
+            document.querySelector('.status').innerHTML=`${result} &#129395;`;
+           }
+           else if(result==='tie'){
+            document.querySelector('.status').innerHTML=`${result} &#128522; `;
+
+           }
+           else if(result==='computer win'){
+            document.querySelector('.status').innerHTML=`${result} &#128560;`;
+           }
+          
+            document.querySelector('.score-board').innerHTML = scoreCard;
+            document.querySelector('.choosed').innerHTML = ` ${player} ${computer}Computer`;
+            }
+            
+       
+       
+
+        </Script>
+       
+        
+    </body>
+</html>
